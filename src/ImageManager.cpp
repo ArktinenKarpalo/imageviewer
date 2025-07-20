@@ -22,6 +22,9 @@ ImageManager::ImageManager(QString path) : QObject(), currentDirectory(path) {
   fileList = File2::loadFiles(targetDirectory.path());
   qInfo() << "Loading" << fileList.size() << "files took" << timer.elapsed()
           << "ms";
+
+  sortBy(SortKey::filename);
+
   if (fileList.size() > 0) {
     auto targetFile = std::find_if(
         fileList.begin(), fileList.end(),
