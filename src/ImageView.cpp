@@ -1,6 +1,7 @@
 #include "ImageView.h"
 #include <QImage>
 #include <QRectF>
+#include <QElapsedTimer>
 
 ImageView::ImageView(QWidget *parent) : QWidget(parent) {
   fitToScreen();

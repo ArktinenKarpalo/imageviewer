@@ -76,17 +76,33 @@ void ImageManager::sortBy(SortKey key) {
 void ImageManager::previousImage() {
   if (loading)
     return;
+  // find previous valid image
   auto idx = fileList.indexOf(*currentFile);
-  setImageTo(fileList[(idx - 1 + fileList.size()) % fileList.size()]);
+  for (;;) {
+    idx = (idx - 1 + fileList.size()) % fileList.size();
+    if (fileList[idx].is_image())
+      break;
+    if (fileList[idx] == *currentFile) // looped around
+      break;
+  }
+  setImageTo(fileList[idx]);
   imageCache.preloadImage(
-      fileList[(idx - 2 + fileList.size()) % fileList.size()]);
+      fileList[(idx - 1 + fileList.size()) % fileList.size()]);
 }
 void ImageManager::nextImage() {
   if (loading)
     return;
+  // find next valid image
   auto idx = fileList.indexOf(*currentFile);
-  setImageTo(fileList[(idx + 1) % fileList.size()]);
-  imageCache.preloadImage(fileList[(idx + 2) % fileList.size()]);
+  for (;;) {
+    idx = (idx + 1) % fileList.size();
+    if (fileList[idx].is_image())
+      break;
+    if (fileList[idx] == *currentFile) // looped around
+      break;
+  }
+  setImageTo(fileList[idx]);
+  imageCache.preloadImage(fileList[(idx + 1) % fileList.size()]);
 }
 
 void ImageManager::rotate(bool ccw) {
